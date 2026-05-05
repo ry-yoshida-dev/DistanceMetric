@@ -1,3 +1,11 @@
+"""
+Cosine, Pearson, Spearman, and Kendall distances plus shared bases.
+
+Exports:
+--------
+Concrete calculators, base classes, and SimilarityCorrelationDistanceMetric.
+"""
+
 from .bases import (
     CorrelationDistanceCalculatorBase,
     CosineDistanceCalculatorBase,

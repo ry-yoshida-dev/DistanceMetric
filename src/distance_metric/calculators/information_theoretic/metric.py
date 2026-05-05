@@ -1,3 +1,9 @@
+"""
+Information-theoretic divergence metric names (KL, JS, Bhattacharyya, Hellinger).
+
+Treats vectors as nonnegative mass over aligned discrete bins.
+"""
+
 from enum import Enum
 from typing import Type
 
@@ -6,6 +12,19 @@ from ...metric import DistanceMetric
 
 
 class InformationTheoreticDistanceMetric(DistanceMetric, Enum):
+    """
+    Divergences and distances derived from probability-like mass vectors.
+
+    Members:
+    --------
+    KL_DIVERGENCE, JENSEN_SHANNON_DIVERGENCE, BHATTACHARYYA, HELLINGER
+        Each string value selects the matching calculator under calculators/.
+
+    Notes:
+    -----
+    KL divergence is asymmetric in query versus gallery roles.
+    """
+
     KL_DIVERGENCE = "kl_divergence"
     JENSEN_SHANNON_DIVERGENCE = "jensen_shannon_divergence"
     BHATTACHARYYA = "bhattacharyya"
@@ -13,6 +32,19 @@ class InformationTheoreticDistanceMetric(DistanceMetric, Enum):
 
     @property
     def calculator(self) -> Type[DistanceCalculator]:
+        """
+        Calculator class for this metric.
+
+        Returns:
+        --------
+        Type[DistanceCalculator]
+            One of the divergence calculator classes in calculators/.
+
+        Raises:
+        -------
+        ValueError
+            If the member is not mapped to a calculator.
+        """
         match self:
             case InformationTheoreticDistanceMetric.KL_DIVERGENCE:
                 from .calculators.kl_divergence import KLDivergenceDistanceCalculator

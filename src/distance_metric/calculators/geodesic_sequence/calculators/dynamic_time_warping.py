@@ -1,3 +1,11 @@
+"""
+Dynamic Time Warping (DTW) distance between sequences.
+
+Aligns two temporal or ordered sequences with a minimum-cost path through a local
+cost matrix. Cross mode evaluates DTW independently for every query row against
+every gallery row.
+"""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -11,9 +19,35 @@ if TYPE_CHECKING:
 
 
 class DynamicTimeWarpingDistanceCalculator(CrossElementwiseCalculatorBase):
-    def elementwise(
+    """
+    Classic DTW with unit step transitions (diagonal, up, left).
+
+    Notes:
+    -----
+    Scalars use absolute difference cost; vector steps use Euclidean norm along the
+    last axis. _cross_array overrides the cross-elementwise default implementation.
+    """
+
+    def _elementwise_values(
         self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
     ) -> np.ndarray:
+        """
+        Optimal alignment cost for one query sequence vs one gallery sequence.
+
+        Parameters:
+        ----------
+        query_array: np.ndarray
+            One-dimensional sequence or shape (T, D) time series.
+        gallery_array: np.ndarray
+            Same dimensional convention as query_array.
+        **kwargs: Any
+            Unused.
+
+        Returns:
+        --------
+        np.ndarray
+            One-element float vector holding the total DTW cost for this pair.
+        """
         q = np.asarray(query_array)
         g = np.asarray(gallery_array)
         n, m = q.shape[0], g.shape[0]
@@ -39,18 +73,58 @@ class DynamicTimeWarpingDistanceCalculator(CrossElementwiseCalculatorBase):
         gallery_array: np.ndarray,
         **kwargs: Any,
     ) -> float:
+        """
+        Extract scalar DTW cost from the one-element container.
+
+        Parameters:
+        ----------
+        values: np.ndarray
+            Length-one array from _elementwise_values.
+        query_array: np.ndarray
+            Unused.
+        gallery_array: np.ndarray
+            Unused.
+        **kwargs: Any
+            Unused.
+
+        Returns:
+        --------
+        float
+            Total alignment cost.
+        """
         return float(values[0])
 
-    def cross(
+    def _cross_array(
         self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
     ) -> np.ndarray:
+        """
+        Fill an (n, m) matrix by running DTW for each row pair.
+
+        Parameters:
+        ----------
+        query_array: np.ndarray
+            Batch of sequences with shape (n, *) where leading axis indexes queries.
+        gallery_array: np.ndarray
+            Batch of sequences with shape (m, *) sharing trailing layout with queries.
+        **kwargs: Any
+            Forwarded to _elementwise_values and _reduce_elementwise_values.
+
+        Returns:
+        --------
+        np.ndarray
+            Shape (n, m); entry (i, j) is DTW cost between query_array[i] and gallery_array[j].
+
+        Notes:
+        -----
+        Validates broadcast compatibility between rows via _validate_same_shape on full batches.
+        """
         self._validate_same_shape(query_array, gallery_array)
         n, m = query_array.shape[0], gallery_array.shape[0]
         out = np.empty((n, m), dtype=float)
         for flat_idx in range(n * m):
             i, j = divmod(flat_idx, m)
             out[i, j] = self._reduce_elementwise_values(
-                values=self.elementwise(query_array[i], gallery_array[j], **kwargs),
+                values=self._elementwise_values(query_array[i], gallery_array[j], **kwargs),
                 query_array=query_array[i],
                 gallery_array=gallery_array[j],
                 **kwargs,
@@ -59,6 +133,14 @@ class DynamicTimeWarpingDistanceCalculator(CrossElementwiseCalculatorBase):
 
     @property
     def metric(self) -> GeodesicSequenceDistanceMetric:
+        """
+        Enum tag for this calculator.
+
+        Returns:
+        --------
+        GeodesicSequenceDistanceMetric
+            Always DYNAMIC_TIME_WARPING.
+        """
         from ..metric import GeodesicSequenceDistanceMetric
 
         return GeodesicSequenceDistanceMetric.DYNAMIC_TIME_WARPING

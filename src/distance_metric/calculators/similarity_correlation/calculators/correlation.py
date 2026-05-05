@@ -1,3 +1,9 @@
+"""
+Pearson correlation distance calculator.
+
+Uses CorrelationDistanceCalculatorBase for centering and normalization.
+"""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -9,8 +15,24 @@ if TYPE_CHECKING:
 
 
 class CorrelationDistanceCalculator(CorrelationDistanceCalculatorBase):
+    """
+    Wrapper selecting SimilarityCorrelationDistanceMetric.CORRELATION.
+
+    Notes:
+    -----
+    Cross-batch behavior follows CorrelationDistanceCalculatorBase._cross_array.
+    """
+
     @property
     def metric(self) -> SimilarityCorrelationDistanceMetric:
+        """
+        Enum tag for this calculator.
+
+        Returns:
+        --------
+        SimilarityCorrelationDistanceMetric
+            Always CORRELATION.
+        """
         from ..metric import SimilarityCorrelationDistanceMetric
 
         return SimilarityCorrelationDistanceMetric.CORRELATION

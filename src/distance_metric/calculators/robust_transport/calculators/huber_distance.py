@@ -1,3 +1,9 @@
+"""
+Huber loss summed across coordinates.
+
+Quadratic for small residuals and linear beyond threshold delta.
+"""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -11,7 +17,15 @@ if TYPE_CHECKING:
 
 
 class HuberDistanceCalculator(CrossElementwiseCalculatorBase):
-    def elementwise(
+    """
+    Sum of per-coordinate Huber losses with threshold delta.
+
+    Notes:
+    -----
+    Pass delta through cross, pairwise, or elementwise kwargs.
+    """
+
+    def _elementwise_values(
         self,
         query_array: np.ndarray,
         gallery_array: np.ndarray,
@@ -19,6 +33,30 @@ class HuberDistanceCalculator(CrossElementwiseCalculatorBase):
         delta: float = 1.0,
         **kwargs: Any,
     ) -> np.ndarray:
+        """
+        Huber kernel values per coordinate.
+
+        Parameters:
+        ----------
+        query_array: np.ndarray
+            Query batch matching gallery_array.
+        gallery_array: np.ndarray
+            Gallery batch matching query_array.
+        delta: float, optional
+            Threshold between quadratic and linear regions; must be positive.
+        **kwargs: Any
+            Unused.
+
+        Returns:
+        --------
+        np.ndarray
+            Per-coordinate Huber loss contributions.
+
+        Raises:
+        -------
+        ValueError
+            If delta is not positive.
+        """
         self._validate_same_shape(query_array, gallery_array)
         delta = float(delta)
         if delta <= 0:
@@ -33,10 +71,37 @@ class HuberDistanceCalculator(CrossElementwiseCalculatorBase):
         gallery_array: np.ndarray,
         **kwargs: Any,
     ) -> np.ndarray:
+        """
+        Sum Huber losses over feature axes.
+
+        Parameters:
+        ----------
+        values: np.ndarray
+            Per-coordinate Huber terms in cross layout.
+        query_array: np.ndarray
+            Unused.
+        gallery_array: np.ndarray
+            Unused.
+        **kwargs: Any
+            Unused.
+
+        Returns:
+        --------
+        np.ndarray
+            Shape (n, m) total Huber distances.
+        """
         return np.sum(values, axis=self._sample_value_axes(values))
 
     @property
     def metric(self) -> RobustTransportDistanceMetric:
+        """
+        Enum tag for this calculator.
+
+        Returns:
+        --------
+        RobustTransportDistanceMetric
+            Always HUBER_DISTANCE.
+        """
         from ..metric import RobustTransportDistanceMetric
 
         return RobustTransportDistanceMetric.HUBER_DISTANCE

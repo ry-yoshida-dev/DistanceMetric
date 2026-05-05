@@ -1,3 +1,11 @@
+"""
+Haversine and DTW distance calculator implementations.
+
+Exports:
+--------
+HaversineDistanceCalculator and DynamicTimeWarpingDistanceCalculator.
+"""
+
 from .dynamic_time_warping import DynamicTimeWarpingDistanceCalculator
 from .haversine import HaversineDistanceCalculator
 

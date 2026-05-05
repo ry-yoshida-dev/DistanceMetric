@@ -1,3 +1,9 @@
+"""
+One-dimensional Wasserstein-style distance via sorted samples.
+
+Sorts each marginal along the last axis and averages absolute gaps between sorted entries.
+"""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -11,9 +17,34 @@ if TYPE_CHECKING:
 
 
 class WassersteinDistanceCalculator(CrossElementwiseCalculatorBase):
-    def elementwise(
+    """
+    Mean absolute difference between aligned sorted coordinates.
+
+    Notes:
+    -----
+    Sort-then-compare pattern for empirical vectors or histograms on matched bins.
+    """
+
+    def _elementwise_values(
         self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
     ) -> np.ndarray:
+        """
+        Absolute gaps between sorted coordinates along the last axis.
+
+        Parameters:
+        ----------
+        query_array: np.ndarray
+            Batch tensor; last axis indexes bins or samples to sort.
+        gallery_array: np.ndarray
+            Same layout as query_array for broadcasting.
+        **kwargs: Any
+            Unused.
+
+        Returns:
+        --------
+        np.ndarray
+            |sort(q) - sort(g)| element-wise after sorting along axis -1.
+        """
         self._validate_same_shape(query_array, gallery_array)
         q = np.sort(query_array, axis=-1)
         g = np.sort(gallery_array, axis=-1)
@@ -26,10 +57,37 @@ class WassersteinDistanceCalculator(CrossElementwiseCalculatorBase):
         gallery_array: np.ndarray,
         **kwargs: Any,
     ) -> np.ndarray:
+        """
+        Average coordinate gaps over remaining feature axes.
+
+        Parameters:
+        ----------
+        values: np.ndarray
+            Sorted gaps in cross layout.
+        query_array: np.ndarray
+            Unused.
+        gallery_array: np.ndarray
+            Unused.
+        **kwargs: Any
+            Unused.
+
+        Returns:
+        --------
+        np.ndarray
+            Shape (n, m) mean absolute gaps between sorted vectors.
+        """
         return np.mean(values, axis=self._sample_value_axes(values))
 
     @property
     def metric(self) -> RobustTransportDistanceMetric:
+        """
+        Enum tag for this calculator.
+
+        Returns:
+        --------
+        RobustTransportDistanceMetric
+            Always WASSERSTEIN.
+        """
         from ..metric import RobustTransportDistanceMetric
 
         return RobustTransportDistanceMetric.WASSERSTEIN

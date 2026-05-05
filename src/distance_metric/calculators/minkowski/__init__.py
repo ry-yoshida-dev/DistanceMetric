@@ -1,3 +1,11 @@
+"""
+Minkowski family vector distances (Lp norms, Chebyshev, squared Euclidean).
+
+Exports:
+--------
+Base class, concrete calculators, and related symbols listed in __all__.
+"""
+
 from .base import MinkowskiDistanceCalculatorBase
 from .calculators import (
     ChebyshevDistanceCalculator,
