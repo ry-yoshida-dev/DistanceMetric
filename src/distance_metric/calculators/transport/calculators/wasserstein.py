@@ -13,7 +13,7 @@ import numpy as np
 from ...cross_elementwise import CrossElementwiseCalculatorBase
 
 if TYPE_CHECKING:
-    from ..metric import RobustTransportDistanceMetric
+    from ..metric import TransportDistanceMetric
 
 
 class WassersteinDistanceCalculator(CrossElementwiseCalculatorBase):
@@ -79,15 +79,15 @@ class WassersteinDistanceCalculator(CrossElementwiseCalculatorBase):
         return np.mean(values, axis=self._sample_value_axes(values))
 
     @property
-    def metric(self) -> RobustTransportDistanceMetric:
+    def metric(self) -> TransportDistanceMetric:
         """
         Enum tag for this calculator.
 
         Returns:
         --------
-        RobustTransportDistanceMetric
+        TransportDistanceMetric
             Always WASSERSTEIN.
         """
-        from ..metric import RobustTransportDistanceMetric
+        from ..metric import TransportDistanceMetric
 
-        return RobustTransportDistanceMetric.WASSERSTEIN
+        return TransportDistanceMetric.WASSERSTEIN

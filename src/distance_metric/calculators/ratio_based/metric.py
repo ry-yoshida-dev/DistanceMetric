@@ -5,7 +5,6 @@ Suited to nonnegative abundance or count-like feature vectors.
 """
 
 from enum import Enum
-from typing import Type
 
 from ...calculator import DistanceCalculator
 from ...metric import DistanceMetric
@@ -31,13 +30,13 @@ class RatioBasedDistanceMetric(DistanceMetric, Enum):
     BRAY_CURTIS = "bray_curtis"
 
     @property
-    def calculator(self) -> Type[DistanceCalculator]:
+    def calculator(self) -> DistanceCalculator:
         """
-        Calculator class for this metric.
+        Calculator instance for this metric.
 
         Returns:
         --------
-        Type[DistanceCalculator]
+        DistanceCalculator
             CanberraDistanceCalculator or BrayCurtisDistanceCalculator.
 
         Raises:
@@ -49,9 +48,9 @@ class RatioBasedDistanceMetric(DistanceMetric, Enum):
             case RatioBasedDistanceMetric.CANBERRA:
                 from .calculators.canberra import CanberraDistanceCalculator
 
-                return CanberraDistanceCalculator
+                return CanberraDistanceCalculator()
             case RatioBasedDistanceMetric.BRAY_CURTIS:
                 from .calculators.bray_curtis import BrayCurtisDistanceCalculator
 
-                return BrayCurtisDistanceCalculator
+                return BrayCurtisDistanceCalculator()
         raise ValueError(f"No calculator found for metric {self}")

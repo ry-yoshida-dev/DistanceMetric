@@ -14,12 +14,14 @@ from .calculators import (
     MinkowskiDistanceCalculator,
     SquaredEuclideanDistanceCalculator,
 )
+from .metric import MinkowskiDistanceMetric
 
 __all__ = [
     "ChebyshevDistanceCalculator",
     "MinkowskiDistanceCalculatorBase",
     "EuclideanDistanceCalculator",
     "ManhattanDistanceCalculator",
+    "MinkowskiDistanceMetric",
     "MinkowskiDistanceCalculator",
     "SquaredEuclideanDistanceCalculator",
 ]

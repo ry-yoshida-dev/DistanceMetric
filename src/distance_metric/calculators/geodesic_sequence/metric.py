@@ -5,7 +5,6 @@ Haversine expects latitude-longitude samples; DTW expects sequences along rows.
 """
 
 from enum import Enum
-from typing import Type
 
 from ...calculator import DistanceCalculator
 from ...metric import DistanceMetric
@@ -31,13 +30,13 @@ class GeodesicSequenceDistanceMetric(DistanceMetric, Enum):
     DYNAMIC_TIME_WARPING = "dynamic_time_warping"
 
     @property
-    def calculator(self) -> Type[DistanceCalculator]:
+    def calculator(self) -> DistanceCalculator:
         """
-        Calculator class for this metric.
+        Calculator instance for this metric.
 
         Returns:
         --------
-        Type[DistanceCalculator]
+        DistanceCalculator
             HaversineDistanceCalculator or DynamicTimeWarpingDistanceCalculator.
 
         Raises:
@@ -49,9 +48,9 @@ class GeodesicSequenceDistanceMetric(DistanceMetric, Enum):
             case GeodesicSequenceDistanceMetric.HAVERSINE:
                 from .calculators.haversine import HaversineDistanceCalculator
 
-                return HaversineDistanceCalculator
+                return HaversineDistanceCalculator()
             case GeodesicSequenceDistanceMetric.DYNAMIC_TIME_WARPING:
                 from .calculators.dynamic_time_warping import DynamicTimeWarpingDistanceCalculator
 
-                return DynamicTimeWarpingDistanceCalculator
+                return DynamicTimeWarpingDistanceCalculator()
         raise ValueError(f"No calculator found for metric {self}")

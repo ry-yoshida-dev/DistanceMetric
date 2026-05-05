@@ -5,7 +5,6 @@ Treats vectors as nonnegative mass over aligned discrete bins.
 """
 
 from enum import Enum
-from typing import Type
 
 from ...calculator import DistanceCalculator
 from ...metric import DistanceMetric
@@ -31,14 +30,14 @@ class InformationTheoreticDistanceMetric(DistanceMetric, Enum):
     HELLINGER = "hellinger"
 
     @property
-    def calculator(self) -> Type[DistanceCalculator]:
+    def calculator(self) -> DistanceCalculator:
         """
-        Calculator class for this metric.
+        Calculator instance for this metric.
 
         Returns:
         --------
-        Type[DistanceCalculator]
-            One of the divergence calculator classes in calculators/.
+        DistanceCalculator
+            One of the divergence calculators in calculators/.
 
         Raises:
         -------
@@ -49,19 +48,19 @@ class InformationTheoreticDistanceMetric(DistanceMetric, Enum):
             case InformationTheoreticDistanceMetric.KL_DIVERGENCE:
                 from .calculators.kl_divergence import KLDivergenceDistanceCalculator
 
-                return KLDivergenceDistanceCalculator
+                return KLDivergenceDistanceCalculator()
             case InformationTheoreticDistanceMetric.JENSEN_SHANNON_DIVERGENCE:
                 from .calculators.jensen_shannon_divergence import (
                     JensenShannonDivergenceDistanceCalculator,
                 )
 
-                return JensenShannonDivergenceDistanceCalculator
+                return JensenShannonDivergenceDistanceCalculator()
             case InformationTheoreticDistanceMetric.BHATTACHARYYA:
                 from .calculators.bhattacharyya import BhattacharyyaDistanceCalculator
 
-                return BhattacharyyaDistanceCalculator
+                return BhattacharyyaDistanceCalculator()
             case InformationTheoreticDistanceMetric.HELLINGER:
                 from .calculators.hellinger import HellingerDistanceCalculator
 
-                return HellingerDistanceCalculator
+                return HellingerDistanceCalculator()
         raise ValueError(f"No calculator found for metric {self}")

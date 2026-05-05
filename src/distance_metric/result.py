@@ -35,3 +35,7 @@ class DistanceResult:
                 return self.max
             case DistanceResultType.SIMILARITY:
                 return self.min
+
+    @property
+    def shape(self) -> tuple[int, ...]:
+        return self.value.shape

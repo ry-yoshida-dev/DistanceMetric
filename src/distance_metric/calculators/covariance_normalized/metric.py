@@ -5,7 +5,6 @@ Calculators require extra arrays (inverse covariance or variances) at call time.
 """
 
 from enum import Enum
-from typing import Type
 
 from ...calculator import DistanceCalculator
 from ...metric import DistanceMetric
@@ -31,13 +30,13 @@ class CovarianceNormalizedDistanceMetric(DistanceMetric, Enum):
     SEUCLIDEAN = "seuclidean"
 
     @property
-    def calculator(self) -> Type[DistanceCalculator]:
+    def calculator(self) -> DistanceCalculator:
         """
-        Calculator class for this metric.
+        Calculator instance for this metric.
 
         Returns:
         --------
-        Type[DistanceCalculator]
+        DistanceCalculator
             MahalanobisDistanceCalculator or SEuclideanDistanceCalculator.
 
         Raises:
@@ -49,9 +48,9 @@ class CovarianceNormalizedDistanceMetric(DistanceMetric, Enum):
             case CovarianceNormalizedDistanceMetric.MAHALANOBIS:
                 from .calculators.mahalanobis import MahalanobisDistanceCalculator
 
-                return MahalanobisDistanceCalculator
+                return MahalanobisDistanceCalculator()
             case CovarianceNormalizedDistanceMetric.SEUCLIDEAN:
                 from .calculators.seuclidean import SEuclideanDistanceCalculator
 
-                return SEuclideanDistanceCalculator
+                return SEuclideanDistanceCalculator()
         raise ValueError(f"No calculator found for metric {self}")

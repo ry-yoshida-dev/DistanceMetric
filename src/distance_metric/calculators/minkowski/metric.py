@@ -1,11 +1,10 @@
 """
 Minkowski-family metric names (Lp norms, Chebyshev, squared Euclidean).
 
-Maps each enum member to a calculator class under calculators/.
+Maps each enum member to a calculator instance under calculators/.
 """
 
 from enum import Enum
-from typing import Type
 
 from ...calculator import DistanceCalculator
 from ...metric import DistanceMetric
@@ -32,15 +31,17 @@ class MinkowskiDistanceMetric(DistanceMetric, Enum):
     SQUARED_EUCLIDEAN = "squared_euclidean"
 
     @property
-    def calculator(self) -> Type[DistanceCalculator]:
+    def calculator(self) -> DistanceCalculator:
         """
-        Calculator class for this metric.
+        Calculator instance for this metric.
 
         Returns:
         --------
-        Type[DistanceCalculator]
+        DistanceCalculator
             One of Manhattan, Euclidean, Minkowski, Chebyshev, or
-            SquaredEuclidean distance calculator classes.
+            SquaredEuclidean distance calculators. ``MINKOWSKI`` uses
+            ``norm_order=2.0``; pass a different exponent via
+            ``MinkowskiDistanceCalculator(norm_order=...)``.
 
         Raises:
         -------
@@ -50,22 +51,20 @@ class MinkowskiDistanceMetric(DistanceMetric, Enum):
         match self:
             case MinkowskiDistanceMetric.MANHATTAN:
                 from .calculators.manhattan import ManhattanDistanceCalculator
-
-                return ManhattanDistanceCalculator
+                return ManhattanDistanceCalculator()
             case MinkowskiDistanceMetric.EUCLIDEAN:
                 from .calculators.euclidean import EuclideanDistanceCalculator
-
-                return EuclideanDistanceCalculator
+                return EuclideanDistanceCalculator()
             case MinkowskiDistanceMetric.MINKOWSKI:
                 from .calculators.minkowski import MinkowskiDistanceCalculator
 
-                return MinkowskiDistanceCalculator
+                return MinkowskiDistanceCalculator()
             case MinkowskiDistanceMetric.CHEBYSHEV:
                 from .calculators.chebyshev import ChebyshevDistanceCalculator
 
-                return ChebyshevDistanceCalculator
+                return ChebyshevDistanceCalculator()
             case MinkowskiDistanceMetric.SQUARED_EUCLIDEAN:
                 from .calculators.squared_euclidean import SquaredEuclideanDistanceCalculator
 
-                return SquaredEuclideanDistanceCalculator
+                return SquaredEuclideanDistanceCalculator()
         raise ValueError(f"No calculator found for metric {self}")

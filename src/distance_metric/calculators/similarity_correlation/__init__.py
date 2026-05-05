@@ -1,16 +1,11 @@
 """
-Cosine, Pearson, Spearman, and Kendall distances plus shared bases.
+Cosine, Pearson, Spearman, and Kendall distances.
 
 Exports:
 --------
-Concrete calculators, base classes, and SimilarityCorrelationDistanceMetric.
+Concrete calculators and SimilarityCorrelationDistanceMetric.
 """
 
-from .bases import (
-    CorrelationDistanceCalculatorBase,
-    CosineDistanceCalculatorBase,
-    SpearmanDistanceCalculatorBase,
-)
 from .calculators import (
     CorrelationDistanceCalculator,
     CosineDistanceCalculator,
@@ -21,11 +16,8 @@ from .metric import SimilarityCorrelationDistanceMetric
 
 __all__ = [
     "CorrelationDistanceCalculator",
-    "CorrelationDistanceCalculatorBase",
     "CosineDistanceCalculator",
-    "CosineDistanceCalculatorBase",
     "KendallDistanceCalculator",
     "SimilarityCorrelationDistanceMetric",
     "SpearmanDistanceCalculator",
-    "SpearmanDistanceCalculatorBase",
 ]

@@ -1,19 +1,18 @@
 """
-Robust and transport-style metric names (Huber loss sum, 1-D Wasserstein).
+Transport-style metric names (Huber loss sum, 1-D Wasserstein).
 
 Huber uses a delta threshold; Wasserstein sorts marginals along the last axis.
 """
 
 from enum import Enum
-from typing import Type
 
 from ...calculator import DistanceCalculator
 from ...metric import DistanceMetric
 
 
-class RobustTransportDistanceMetric(DistanceMetric, Enum):
+class TransportDistanceMetric(DistanceMetric, Enum):
     """
-    Robust loss and empirical transport distances.
+    Huber loss and empirical transport distances.
 
     Members:
     --------
@@ -31,13 +30,13 @@ class RobustTransportDistanceMetric(DistanceMetric, Enum):
     WASSERSTEIN = "wasserstein"
 
     @property
-    def calculator(self) -> Type[DistanceCalculator]:
+    def calculator(self) -> DistanceCalculator:
         """
-        Calculator class for this metric.
+        Calculator instance for this metric.
 
         Returns:
         --------
-        Type[DistanceCalculator]
+        DistanceCalculator
             HuberDistanceCalculator or WassersteinDistanceCalculator.
 
         Raises:
@@ -46,12 +45,12 @@ class RobustTransportDistanceMetric(DistanceMetric, Enum):
             If the member is not mapped to a calculator.
         """
         match self:
-            case RobustTransportDistanceMetric.HUBER_DISTANCE:
+            case TransportDistanceMetric.HUBER_DISTANCE:
                 from .calculators.huber_distance import HuberDistanceCalculator
 
-                return HuberDistanceCalculator
-            case RobustTransportDistanceMetric.WASSERSTEIN:
+                return HuberDistanceCalculator()
+            case TransportDistanceMetric.WASSERSTEIN:
                 from .calculators.wasserstein import WassersteinDistanceCalculator
 
-                return WassersteinDistanceCalculator
+                return WassersteinDistanceCalculator()
         raise ValueError(f"No calculator found for metric {self}")

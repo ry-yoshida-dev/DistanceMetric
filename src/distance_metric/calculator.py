@@ -92,7 +92,8 @@ class DistanceCalculator(ABC):
         Returns:
         --------
         DistanceResult
-            Scalar metric in the value field (typically 0-d array).
+            Metric in the value field as a 1-d array (shape (1,) for one pair), 
+            so result.shape matches cross and pairwise style arrays.
         """
         self._validate_same_shape(query_array, gallery_array)
         inner = self._cross_array(
@@ -101,7 +102,8 @@ class DistanceCalculator(ABC):
             **kwargs,
         )
         inner_arr = np.asarray(inner)
-        return self._wrap(inner_arr.reshape(inner_arr.shape[0], inner_arr.shape[1])[0, 0])
+        cell = inner_arr.reshape(inner_arr.shape[0], inner_arr.shape[1])[0, 0]
+        return self._wrap(np.atleast_1d(cell))
 
     def _validate_same_shape(
         self,

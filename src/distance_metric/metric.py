@@ -1,6 +1,5 @@
 from abc import ABCMeta, abstractmethod
 from enum import EnumMeta
-from typing import Type
 
 from .calculator import DistanceCalculator
 
@@ -12,5 +11,5 @@ class ABCEnumMeta(EnumMeta, ABCMeta):
 class DistanceMetric(metaclass=ABCEnumMeta):
     @property
     @abstractmethod
-    def calculator(self) -> Type[DistanceCalculator]:
-        """Return calculator class for this metric member."""
+    def calculator(self) -> DistanceCalculator:
+        """Return a calculator instance for this metric member."""

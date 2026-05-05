@@ -13,7 +13,7 @@ import numpy as np
 from ...cross_elementwise import CrossElementwiseCalculatorBase
 
 if TYPE_CHECKING:
-    from ..metric import RobustTransportDistanceMetric
+    from ..metric import TransportDistanceMetric
 
 
 class HuberDistanceCalculator(CrossElementwiseCalculatorBase):
@@ -93,15 +93,15 @@ class HuberDistanceCalculator(CrossElementwiseCalculatorBase):
         return np.sum(values, axis=self._sample_value_axes(values))
 
     @property
-    def metric(self) -> RobustTransportDistanceMetric:
+    def metric(self) -> TransportDistanceMetric:
         """
         Enum tag for this calculator.
 
         Returns:
         --------
-        RobustTransportDistanceMetric
+        TransportDistanceMetric
             Always HUBER_DISTANCE.
         """
-        from ..metric import RobustTransportDistanceMetric
+        from ..metric import TransportDistanceMetric
 
-        return RobustTransportDistanceMetric.HUBER_DISTANCE
+        return TransportDistanceMetric.HUBER_DISTANCE

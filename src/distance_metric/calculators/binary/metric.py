@@ -6,7 +6,6 @@ resolving DistanceMetric from configuration or APIs.
 """
 
 from enum import Enum
-from typing import Type
 
 from ...calculator import DistanceCalculator
 from ...metric import DistanceMetric
@@ -26,20 +25,20 @@ class BinaryDistanceMetric(DistanceMetric, Enum):
     Notes:
     -----
     String values match DistanceMetric naming; the calculator property resolves
-    to concrete calculator classes with lazy imports.
+    to concrete calculator instances with lazy imports.
     """
 
     HAMMING = "hamming"
     JACCARD = "jaccard"
 
     @property
-    def calculator(self) -> Type[DistanceCalculator]:
+    def calculator(self) -> DistanceCalculator:
         """
-        Calculator class associated with this metric name.
+        Calculator instance associated with this metric name.
 
         Returns:
         --------
-        Type[DistanceCalculator]
+        DistanceCalculator
             HammingDistanceCalculator or JaccardDistanceCalculator.
 
         Raises:
@@ -51,9 +50,9 @@ class BinaryDistanceMetric(DistanceMetric, Enum):
             case BinaryDistanceMetric.HAMMING:
                 from .calculators.hamming import HammingDistanceCalculator
 
-                return HammingDistanceCalculator
+                return HammingDistanceCalculator()
             case BinaryDistanceMetric.JACCARD:
                 from .calculators.jaccard import JaccardDistanceCalculator
 
-                return JaccardDistanceCalculator
+                return JaccardDistanceCalculator()
         raise ValueError(f"No calculator found for metric {self}")
