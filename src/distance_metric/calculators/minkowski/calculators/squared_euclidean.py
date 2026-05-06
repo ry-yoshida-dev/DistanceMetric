@@ -94,5 +94,4 @@ class SquaredEuclideanDistanceCalculator(CrossElementwiseCalculatorBase):
             Always MinkowskiDistanceMetric.SQUARED_EUCLIDEAN.
         """
         from ..metric import MinkowskiDistanceMetric
-
         return MinkowskiDistanceMetric.SQUARED_EUCLIDEAN

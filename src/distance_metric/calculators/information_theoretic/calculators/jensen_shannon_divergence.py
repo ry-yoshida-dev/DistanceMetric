@@ -101,5 +101,4 @@ class JensenShannonDivergenceDistanceCalculator(CrossElementwiseCalculatorBase):
             Always JENSEN_SHANNON_DIVERGENCE.
         """
         from ..metric import InformationTheoreticDistanceMetric
-
         return InformationTheoreticDistanceMetric.JENSEN_SHANNON_DIVERGENCE

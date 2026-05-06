@@ -92,12 +92,14 @@ class JaccardDistanceCalculator(CrossElementwiseCalculatorBase):
 
         Notes:
         -----
-        sample_axes starts at dimension index 3 so axes 0–2 are query index,
-        gallery index, and channel.
+        After selecting channel 0 or 1, remaining axes are query batch, gallery
+        batch, then feature axes to sum out before dividing intersection by union.
         """
-        sample_axes = tuple(range(3, values.ndim))
-        inter = np.sum(values[:, :, 0, ...], axis=sample_axes)
-        union = np.sum(values[:, :, 1, ...], axis=sample_axes)
+        intersection_plane = values[:, :, 0, ...]
+        union_plane = values[:, :, 1, ...]
+        sample_axes = tuple(range(2, intersection_plane.ndim))
+        inter = np.sum(intersection_plane, axis=sample_axes)
+        union = np.sum(union_plane, axis=sample_axes)
         return 1.0 - (inter / np.maximum(union, 1e-12))
 
     @property

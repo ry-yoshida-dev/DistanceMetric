@@ -18,6 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "numpy",
+    "numba>=0.59.0",
 ]
 
 [project.urls]
@@ -29,3 +30,6 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 distance_metric = ["py.typed"]
+
+[tool.pyright]
+stubPath = "typings"

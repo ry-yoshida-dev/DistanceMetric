@@ -115,5 +115,4 @@ class SEuclideanDistanceCalculator(CrossElementwiseCalculatorBase):
             Always SEUCLIDEAN.
         """
         from ..metric import CovarianceNormalizedDistanceMetric
-
         return CovarianceNormalizedDistanceMetric.SEUCLIDEAN

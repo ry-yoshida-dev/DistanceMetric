@@ -105,5 +105,4 @@ class KendallDistanceCalculator(CrossElementwiseCalculatorBase):
             Always KENDALL.
         """
         from ..metric import SimilarityCorrelationDistanceMetric
-
         return SimilarityCorrelationDistanceMetric.KENDALL

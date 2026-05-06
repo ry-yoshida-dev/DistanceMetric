@@ -93,5 +93,4 @@ class HellingerDistanceCalculator(CrossElementwiseCalculatorBase):
             Always HELLINGER.
         """
         from ..metric import InformationTheoreticDistanceMetric
-
         return InformationTheoreticDistanceMetric.HELLINGER

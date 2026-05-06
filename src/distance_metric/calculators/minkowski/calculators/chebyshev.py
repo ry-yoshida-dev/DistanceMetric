@@ -93,5 +93,4 @@ class ChebyshevDistanceCalculator(CrossElementwiseCalculatorBase):
             Always MinkowskiDistanceMetric.CHEBYSHEV.
         """
         from ..metric import MinkowskiDistanceMetric
-
         return MinkowskiDistanceMetric.CHEBYSHEV

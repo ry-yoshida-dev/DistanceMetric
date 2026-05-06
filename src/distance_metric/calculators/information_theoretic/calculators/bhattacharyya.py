@@ -94,5 +94,4 @@ class BhattacharyyaDistanceCalculator(CrossElementwiseCalculatorBase):
             Always BHATTACHARYYA.
         """
         from ..metric import InformationTheoreticDistanceMetric
-
         return InformationTheoreticDistanceMetric.BHATTACHARYYA
