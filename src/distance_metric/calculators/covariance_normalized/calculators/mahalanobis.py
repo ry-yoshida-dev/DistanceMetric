@@ -56,7 +56,10 @@ class MahalanobisDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             query_array minus gallery_array, same broadcast shape.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         return query_array - gallery_array
 
     def _reduce_elementwise_values(

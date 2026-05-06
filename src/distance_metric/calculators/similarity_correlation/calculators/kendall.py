@@ -26,7 +26,10 @@ class KendallDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Concordance sign per unordered feature pair from upper-triangular indices.
@@ -45,7 +48,10 @@ class KendallDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             Values in {-1, 0, 1} indicating discordant, tie, or concordant pairs per bundle.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         n = query_array.shape[-1]
         i_idx, j_idx = np.triu_indices(n, k=1)
         dq = query_array[..., i_idx] - query_array[..., j_idx]

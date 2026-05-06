@@ -29,7 +29,10 @@ class HammingDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Per-coordinate mismatch indicators before averaging.
@@ -49,7 +52,10 @@ class HammingDistanceCalculator(CrossElementwiseCalculatorBase):
             Float array of zeros and ones with the broadcast shape of the inputs,
             where 1 marks positions where query_array != gallery_array.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         return (query_array != gallery_array).astype(float)
 
     def _reduce_elementwise_values(
@@ -93,5 +99,4 @@ class HammingDistanceCalculator(CrossElementwiseCalculatorBase):
             Always BinaryDistanceMetric.HAMMING.
         """
         from ..metric import BinaryDistanceMetric
-
         return BinaryDistanceMetric.HAMMING

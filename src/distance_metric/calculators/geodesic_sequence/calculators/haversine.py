@@ -27,7 +27,10 @@ class HaversineDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Haversine a term per coordinate pair (before central angle).
@@ -51,7 +54,10 @@ class HaversineDistanceCalculator(CrossElementwiseCalculatorBase):
         ValueError
             If the last dimension is not of size two.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         if query_array.shape[-1] != 2:
             raise ValueError("Haversine distance expects samples as [latitude, longitude].")
         lat1, lon1 = query_array[..., 0], query_array[..., 1]

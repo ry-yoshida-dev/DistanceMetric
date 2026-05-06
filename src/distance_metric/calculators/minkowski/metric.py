@@ -39,9 +39,8 @@ class MinkowskiDistanceMetric(DistanceMetric, Enum):
         --------
         DistanceCalculator
             One of Manhattan, Euclidean, Minkowski, Chebyshev, or
-            SquaredEuclidean distance calculators. ``MINKOWSKI`` uses
-            ``norm_order=2.0``; pass a different exponent via
-            ``MinkowskiDistanceCalculator(norm_order=...)``.
+            SquaredEuclidean distance calculators. MINKOWSKI uses norm_order=2.0;
+            pass a different exponent via MinkowskiDistanceCalculator(norm_order=...).
 
         Raises:
         -------

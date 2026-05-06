@@ -69,7 +69,7 @@ class CrossElementwiseCalculatorBase(DistanceCalculator):
 
         Notes:
         -----
-        Implementations usually call _validate_same_shape when inputs must align.
+        Implementations usually call _validate_broadcast_compatible when inputs must align.
         """
 
     @abstractmethod
@@ -78,7 +78,7 @@ class CrossElementwiseCalculatorBase(DistanceCalculator):
         values: np.ndarray,
         query_array: np.ndarray,
         gallery_array: np.ndarray,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> np.ndarray | float:
         """
         Reduce broadcasted element-wise values into final distance scores.
@@ -124,7 +124,7 @@ class CrossElementwiseCalculatorBase(DistanceCalculator):
         self,
         query_array: np.ndarray,
         gallery_array: np.ndarray,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Compute cross distances with broadcasting.

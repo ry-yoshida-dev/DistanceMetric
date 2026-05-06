@@ -48,7 +48,10 @@ class CosineDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             query_array * gallery_array with broadcast shape.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         return query_array * gallery_array
 
     def _reduce_elementwise_values(
@@ -84,7 +87,10 @@ class CosineDistanceCalculator(CrossElementwiseCalculatorBase):
         return 1.0 - (dot / np.maximum(denom, 1e-12))
 
     def _cross_array(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Broadcast cross layout then reduce to cosine distances.

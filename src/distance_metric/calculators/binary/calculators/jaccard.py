@@ -31,7 +31,10 @@ class JaccardDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Build per-coordinate intersection and union indicators for reduction.
@@ -52,7 +55,10 @@ class JaccardDistanceCalculator(CrossElementwiseCalculatorBase):
             Stacked array with an axis at index 2: channel 0 is logical AND,
             channel 1 is logical OR (float-cast), per coordinate.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         q = query_array.astype(bool)
         g = gallery_array.astype(bool)
         return np.stack([np.logical_and(q, g), np.logical_or(q, g)], axis=2).astype(float)
@@ -105,5 +111,4 @@ class JaccardDistanceCalculator(CrossElementwiseCalculatorBase):
             Always BinaryDistanceMetric.JACCARD.
         """
         from ..metric import BinaryDistanceMetric
-
         return BinaryDistanceMetric.JACCARD

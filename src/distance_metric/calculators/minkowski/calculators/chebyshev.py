@@ -48,7 +48,10 @@ class ChebyshevDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             Absolute differences with the same broadcast shape as inputs.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         return np.abs(query_array - gallery_array)
 
     def _reduce_elementwise_values(

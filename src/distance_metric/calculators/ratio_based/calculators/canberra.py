@@ -26,7 +26,10 @@ class CanberraDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Normalized absolute gaps per coordinate.
@@ -45,7 +48,10 @@ class CanberraDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             |q-g| / max(|q|+|g|, tiny) with broadcast shape.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         num = np.abs(query_array - gallery_array)
         den = np.abs(query_array) + np.abs(gallery_array)
         return num / np.maximum(den, 1e-12)

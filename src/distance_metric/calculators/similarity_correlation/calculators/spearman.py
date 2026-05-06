@@ -43,7 +43,10 @@ class SpearmanDistanceCalculator(CorrelationDistanceCalculator):
         return np.argsort(np.argsort(values)).astype(float)
 
     def _cross_array(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Rank each row, then correlation distance on ranks.

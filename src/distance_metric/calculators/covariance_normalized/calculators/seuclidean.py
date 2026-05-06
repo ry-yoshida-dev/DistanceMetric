@@ -59,7 +59,10 @@ class SEuclideanDistanceCalculator(CrossElementwiseCalculatorBase):
         ValueError
             If variance is None or its shape does not match each sample.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         if variance is None:
             raise ValueError("SEuclidean distance requires variance.")
         variance = np.asarray(variance, dtype=float)

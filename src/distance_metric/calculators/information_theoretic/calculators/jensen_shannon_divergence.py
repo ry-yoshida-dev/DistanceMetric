@@ -52,7 +52,10 @@ class JensenShannonDivergenceDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             Per-bin divergence contributions before summing over features.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         eps = float(eps)
         p = np.maximum(query_array, eps)
         q = np.maximum(gallery_array, eps)

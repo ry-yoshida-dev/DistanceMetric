@@ -27,7 +27,10 @@ class BrayCurtisDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Absolute coordinate-wise differences.
@@ -46,7 +49,10 @@ class BrayCurtisDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             |q - g| with broadcast shape.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         return np.abs(query_array - gallery_array)
 
     def _reduce_elementwise_values(
@@ -82,7 +88,10 @@ class BrayCurtisDistanceCalculator(CrossElementwiseCalculatorBase):
         return numerator / np.maximum(denominator, 1e-12)
 
     def _cross_array(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Same broadcast layout as CrossElementwiseCalculatorBase._cross_array.

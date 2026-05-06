@@ -26,7 +26,10 @@ class BhattacharyyaDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Per-bin overlap terms before summing and taking negative log.
@@ -45,7 +48,10 @@ class BhattacharyyaDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             Element-wise nonnegative overlap terms (float).
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         return np.sqrt(np.maximum(query_array, 0.0) * np.maximum(gallery_array, 0.0))
 
     def _reduce_elementwise_values(

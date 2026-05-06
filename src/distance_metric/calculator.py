@@ -69,8 +69,8 @@ class DistanceCalculator(ABC):
         the result in DistanceResult using the result_type class attribute.
         """
 
-    def _wrap(self, value: np.ndarray | float) -> DistanceResult:
-        return DistanceResult(value=np.asarray(value), type=self.result_type)
+    def _wrap(self, value: np.ndarray) -> DistanceResult:
+        return DistanceResult(value=value, type=self.result_type)
 
     def elementwise(
         self,
@@ -79,23 +79,32 @@ class DistanceCalculator(ABC):
         **kwargs: Any,
     ) -> DistanceResult:
         """
-        Compare two single samples and return their metric value.
+        Compare two samples (typically one pair) and return their metric value.
 
         Parameters:
         ----------
         query_array: np.ndarray
-            Query sample (typically one sample, not batched).
+            Query tensor for one logical pair before batching.
         gallery_array: np.ndarray
-            Gallery sample. Shapes must follow NumPy broadcasting rules with
-            query_array; they need not be identical.
+            Gallery tensor for the same pair. Must be broadcast-compatible with
+            query_array per NumPy rules; identical shapes are not required.
 
         Returns:
         --------
         DistanceResult
-            Metric in the value field as a 1-d array (shape (1,) for one pair), 
-            so result.shape matches cross and pairwise style arrays.
+            value is always a rank-1 numpy.ndarray (shape (1,) for a single scalar
+            score), never a Python float.
+
+        Notes:
+        -----
+        Broadcast compatibility is checked via _validate_broadcast_compatible.
+        Inputs are then promoted with a leading batch axis so _cross_array runs
+        in the same batched mode as cross.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         inner = self._cross_array(
             query_array=query_array[None, ...],
             gallery_array=gallery_array[None, ...],
@@ -105,15 +114,15 @@ class DistanceCalculator(ABC):
         cell = inner_arr.reshape(inner_arr.shape[0], inner_arr.shape[1])[0, 0]
         return self._wrap(np.atleast_1d(cell))
 
-    def _validate_same_shape(
+    def _validate_broadcast_compatible(
         self,
         query_array: np.ndarray,
         gallery_array: np.ndarray,
     ) -> None:
         """
-        Ensure query_array and gallery_array are broadcast-compatible.
+        Ensure query_array and gallery_array are NumPy broadcast-compatible.
 
-        Uses numpy.broadcast_shapes; raises ValueError if the shapes cannot be
-        broadcast together. Identical shapes are not required.
+        Uses numpy.broadcast_shapes; raises ValueError if the shapes cannot
+        be broadcast together. Matching shapes are not required.
         """
         np.broadcast_shapes(query_array.shape, gallery_array.shape)

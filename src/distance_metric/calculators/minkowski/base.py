@@ -59,7 +59,10 @@ class MinkowskiDistanceCalculatorBase(CrossElementwiseCalculatorBase):
         """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: object
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: object,
     ) -> np.ndarray:
         """
         Powered absolute coordinate differences before reduction.
@@ -79,7 +82,10 @@ class MinkowskiDistanceCalculatorBase(CrossElementwiseCalculatorBase):
             Same shape as the broadcast of query and gallery; nonnegative float
             values suitable for summing then rooting.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         return np.abs(query_array - gallery_array) ** float(self.norm_order)
 
     def _reduce_elementwise_values(

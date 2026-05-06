@@ -57,7 +57,10 @@ class HuberDistanceCalculator(CrossElementwiseCalculatorBase):
         ValueError
             If delta is not positive.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         delta = float(delta)
         if delta <= 0:
             raise ValueError("delta must be greater than 0.")

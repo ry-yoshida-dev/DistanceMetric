@@ -29,7 +29,10 @@ class DynamicTimeWarpingDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Optimal alignment cost for one query sequence vs one gallery sequence.
@@ -95,7 +98,10 @@ class DynamicTimeWarpingDistanceCalculator(CrossElementwiseCalculatorBase):
         return float(values[0])
 
     def _cross_array(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Fill an (n, m) matrix by running DTW for each row pair.
@@ -116,9 +122,12 @@ class DynamicTimeWarpingDistanceCalculator(CrossElementwiseCalculatorBase):
 
         Notes:
         -----
-        Validates broadcast compatibility between rows via _validate_same_shape on full batches.
+        Validates broadcast compatibility between rows via _validate_broadcast_compatible on full batches.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         n, m = query_array.shape[0], gallery_array.shape[0]
         out = np.empty((n, m), dtype=float)
         for flat_idx in range(n * m):

@@ -26,7 +26,10 @@ class WassersteinDistanceCalculator(CrossElementwiseCalculatorBase):
     """
 
     def _elementwise_values(
-        self, query_array: np.ndarray, gallery_array: np.ndarray, **kwargs: Any
+        self,
+        query_array: np.ndarray,
+        gallery_array: np.ndarray,
+        **kwargs: Any,
     ) -> np.ndarray:
         """
         Absolute gaps between sorted coordinates along the last axis.
@@ -45,7 +48,10 @@ class WassersteinDistanceCalculator(CrossElementwiseCalculatorBase):
         np.ndarray
             |sort(q) - sort(g)| element-wise after sorting along axis -1.
         """
-        self._validate_same_shape(query_array, gallery_array)
+        self._validate_broadcast_compatible(
+            query_array=query_array,
+            gallery_array=gallery_array,
+        )
         q = np.sort(query_array, axis=-1)
         g = np.sort(gallery_array, axis=-1)
         return np.abs(q - g)
