@@ -22,8 +22,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/ry-yoshida-private/DistanceMetric"
-"Bug Tracker" = "https://github.com/ry-yoshida-private/DistanceMetric/issues"
+Homepage = "https://github.com/ry-yoshida-dev/DistanceMetric"
+"Bug Tracker" = "https://github.com/ry-yoshida-dev/DistanceMetric/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
